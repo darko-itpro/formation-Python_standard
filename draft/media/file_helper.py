@@ -1,3 +1,6 @@
+file_path = ""  # Définissez le chemin vers le fichier
+
+
 def load_from_csv(path):
     with open(path) as shows_file:
         shows_file.readline()
@@ -11,5 +14,5 @@ def load_from_csv(path):
             yield show, int(season), int(episode), title, int(duration), int(year)
 
 
-for infos in load_from_csv("/Users/dad3zero/Workshop/Trainings/training-python/assets/showslist_bad.csv"):
+for infos in load_from_csv():
     print(infos)

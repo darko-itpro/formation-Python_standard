@@ -94,15 +94,15 @@ class Training:
         else:
             return self._students.pop(students_names.index(name.capitalize()))
 
-    def remove_students_for_company(self, comany: str):
+    def remove_students_for_company(self, company: str):
         """
         Remove all students for a given company.
 
-        :param comany: The company name.
+        :param company: The company name.
         :return: A list of students removed which are from the company or an empty list if there is no student from that
         company.
         """
-        students = [student for student in self._students if student.company == comany.capitalize()]
+        students = [student for student in self._students if student.company == company.capitalize()]
         self._students = [student for student in self._students if student not in students]
 
         return students
