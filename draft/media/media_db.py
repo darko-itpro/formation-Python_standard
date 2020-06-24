@@ -59,7 +59,7 @@ class TvShowDao:
         :return: True si l'épisode existe sinon faux
         """
         cur = self._connect.cursor()
-        cur.execute(SQL_GET_EPISODE, (ep_number, season_number))
+        cur.execute(SQL_GET_EPISODE, (season_number, ep_number))
         return True if cur.fetchone() else False
 
     def add_episode(self, title: str, ep_number: int, season_number: int):

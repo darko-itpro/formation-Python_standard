@@ -1,9 +1,24 @@
-#!/usr/bin/env python 
+#!/usr/bin/env python
 
 FILE_PATH = "../../../assets/ministere_culture/frequentation-des-musees-de-france.csv"
 
 
-def display_max_visites(file_path=FILE_PATH):
+def load_museum_location(file_path: str):
+    with open(file_path) as data_file:
+        if file_path.lower().endswith(".json"):
+            import json
+            data = json.load(data_file)
+            for key, value in data[0].items():
+                print(key, type(value))
+
+
+        elif file_path.lower().endswith(".csv"):
+            import csv
+            data_reader = csv.reader(data_file)
+            print(data_name)
+
+
+def display_max_visites(file_path):
     max_visites = 0
     visites_data = None
 
@@ -19,7 +34,7 @@ def display_max_visites(file_path=FILE_PATH):
     print(visites_data)
 
 
-def load_as_dicts(file_path=FILE_PATH):
+def load_as_dicts(file_path):
     """
     Extrait les informations sur les musées sous forme d'un dictionnaire.
 
@@ -54,10 +69,10 @@ def load_as_dicts(file_path=FILE_PATH):
 
 if __name__ == "__main__":
     for name in sorted([(element['museum_name'], element['city'], len(element["visits"]))
-                        for element in load_as_dicts().values()]):
+                        for element in load_as_dicts(FILE_PATH).values()]):
         print(name)
 
-    last_museum = list(load_as_dicts().values())[-1]
+    last_museum = list(load_as_dicts(FILE_PATH).values())[-1]
 
     print("------------------------------")
     print("exemple de comptage")
@@ -65,7 +80,7 @@ if __name__ == "__main__":
     for year, visits, kind in sorted(last_museum['visits'], key=lambda x: (x[0], x[-1])):
         print("  {:4} - {:>5} ({})".format(year, visits if visits is not None else "--", kind))
 
-    for museum in load_as_dicts().values():
+    for museum in load_as_dicts(FILE_PATH).values():
         print("------------------------------")
         print("exemple de comptage")
         print(museum["museum_name"], "-", museum['city'])
