@@ -13,12 +13,16 @@ place.
 
 import sqlite3 as sqlite
 
-SQL_CREATE_EPISODES_TABLE = "CREATE TABLE IF NOT EXISTS episodes (number INT NOT NULL, season INT NOT NULL, title TEXT NOT NULL)"
+SQL_CREATE_EPISODES_TABLE = "CREATE TABLE IF NOT EXISTS episodes ("\
+                            "e_number INT NOT NULL, "\
+                            "season INT NOT NULL, "\
+                            "title TEXT NOT NULL, "\
+                            "PRIMARY KEY (e_number , season))"
 
 SQL_ADD_EPISODE = "INSERT INTO episodes values(?, ?, ?)"
-SQL_GET_EPISODE = "SELECT title, season, number FROM episodes where season = ? and number = ?"
-SQL_GET_ALL_EPISODES = "SELECT title, season, number FROM episodes ORDER BY season, number"
-SQL_GET_EPISODES_FOR_SEASON = "SELECT title, season, number FROM episodes where season = ? ORDER BY number"
+SQL_GET_EPISODE = "SELECT title, season, e_number FROM episodes where season = ? and e_number = ?"
+SQL_GET_ALL_EPISODES = "SELECT title, season, e_number FROM episodes ORDER BY season, e_number"
+SQL_GET_EPISODES_FOR_SEASON = "SELECT title, season, e_number FROM episodes where season = ? ORDER BY e_number"
 
 
 class TvShowDao:
@@ -46,22 +50,6 @@ class TvShowDao:
     def __str__(self):
         return 'Media DB Connector ({})'.format(self._db_name)
 
-    def _exists(self, title: str, ep_number: int, season_number: int) -> bool:
-        """
-        Vérifie si l'épisode existe.
-
-
-        Dans cette implémentation, le titre n'est pas utilisé.
-
-        :param title: titre de l'épisode
-        :param ep_number: numéro de l'épisode
-        :param season_number: saison de l'épisode
-        :return: True si l'épisode existe sinon faux
-        """
-        cur = self._connect.cursor()
-        cur.execute(SQL_GET_EPISODE, (season_number, ep_number))
-        return True if cur.fetchone() else False
-
     def add_episode(self, title: str, ep_number: int, season_number: int):
         """
         Ajoute un épisode à la collection.
@@ -71,9 +59,9 @@ class TvShowDao:
         :param season_number: numéro de saison de l'épisode
         :raises ValueError: si l'épisode existe déjà
         """
-        if self._exists(title, ep_number, season_number):  # SQLite ne gère pas l'intégrité référentielle, nous devons le faire nous même
-            raise ValueError(f"Episode s{season_number}e{ep_number} exists")
-
-        cur = self._connect.cursor()
-        cur.execute(SQL_ADD_EPISODE, (ep_number, season_number, title))
-        self._connect.commit()
+        try:
+            with self._connect:
+                cur = self._connect.cursor()
+                cur.execute(SQL_ADD_EPISODE, (ep_number, season_number, title))
+        except sqlite.IntegrityError:
+            raise ValueError(f"Episode {title} s{season_number}e{ep_number} axists")
