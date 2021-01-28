@@ -3,6 +3,8 @@
 
 """
 Module définissant les objets *métier* de la gestion d'une médiathèque.
+
+Ce module illustre
 """
 
 import dataclasses as dc
@@ -23,7 +25,7 @@ class TvShow:
         """
         return self._episodes.copy()
 
-    def add_episode(self, title, number, season_number):
+    def add_episode(self, title, number, season_number, duration=None):
         """
         Ajoute un épisode à la série.
 
@@ -33,14 +35,14 @@ class TvShow:
         :raise ValueError: si l'épisode existe déjà dans la série ou si les
         numéros ne représentent pas des nombres.
         """
-        new_episode = Episode(title, int(number), int(season_number))
+        new_episode = Episode(title, int(number), int(season_number),
+                              int(duration) if duration is not None else None)
         if new_episode in self._episodes:
             raise ValueError(
                 f"Episode [s{season_number:02}e{number:02}-{title}]exists")
 
         self._episodes.append(new_episode)
-        self._episodes.sort(key=lambda episode: (episode.season_number,
-                                                 episode.number))
+        self._episodes.sort()
 
     def get_episodes(self, season=None):
         """
@@ -64,7 +66,10 @@ class TvShow:
             return self.episodes
 
     def __str__(self):
-        return "TV Show [{}]".format(self.name)
+        return f"TV Show [{self.name}] - {len(self.episodes)} episodes"
+
+    def __repr__(self):
+        return f"TvShow({self.name})"
 
 
 @dc.dataclass(eq=False, frozen=True)
@@ -72,6 +77,7 @@ class Episode:
     title: str
     number: int
     season_number: int
+    duration: int = None
 
     def __post_init__(self):
         """
@@ -86,6 +92,9 @@ class Episode:
             raise ValueError(f"Episode season number should be positive "
                              f"({self.season_number})")
 
+        if self.duration is not None and self.duration <= 0:
+            raise ValueError(f"Duration must be positive value")
+
     def __eq__(self, other):
         """
         Le critère d'égalité entre deux épisodes se limite aux numéro d'épisode
@@ -97,6 +106,12 @@ class Episode:
         """
         if not isinstance(other, Episode):
             return False
-        else:
-            return (self.number, self.season_number) == (other.number,
-                                                         other.season_number)
+
+        return (self.number, self.season_number) == (other.number,
+                                                     other.season_number)
+
+    def __gt__(self, other):
+        if not isinstance(other, Episode):
+            raise TypeError(f"'>' not supported between instances of 'Episode' and '{type(other)}'")
+
+        return (self.season_number, self.number) > (other.season_number, other.number)

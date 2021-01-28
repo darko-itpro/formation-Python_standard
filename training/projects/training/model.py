@@ -3,6 +3,51 @@ Module pour une représentation de formation sous forme d'objet.
 """
 
 
+
+import sqlite3 as lite
+
+conn = lite.connect("testdb.db")
+
+cur = conn.cursor()
+cur.execute("CREATE TABLE IF NOT EXISTS trainings ("
+            "subject TEXT NOT NULL, "
+            "duration INT NOT NULL, "
+            "seats INT NOT NULL")
+
+title = "Python, l'essentiel"
+duration = 5
+seats = 12
+
+SQL_ADD_TRAINEE = ""
+SQL_COUNT_TRAINEES_FOR_TRAINING = ""
+SQL_GET_TRAINING = ""
+name = ""
+company = ""
+training = ""
+
+import sqlite3 as lite
+
+conn = lite.connect("testdb.db")
+
+cur.execute(SQL_ADD_TRAINEE, (name, company))
+cur.execute(SQL_COUNT_TRAINEES_FOR_TRAINING, (training))
+
+
+
+cur.execute("INSERT INTO trainings VALUES (?, ?, ?)",
+            (title, duration, seats))
+
+cur.execute("SELECT * FROM trainings WHERE duration=:duration",
+            {duration:5})
+
+try:
+    with conn:
+        cur = conn.cursor()
+        cur.execute(SQL_ADD_EPISODE, (ep_number, season_number, title))
+except lite.IntegrityError:
+    raise ValueError(f"Episode {title} s{season_number}e{ep_number} axists")
+
+
 class Student:
     def __init__(self, name: str, title:str = None, company: str = None):
         """

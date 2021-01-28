@@ -119,11 +119,18 @@ class TvShow:
     def name(self):
         return self._show_name
 
+    @property
+    def episodes(self):
+        return self.get_episodes()
+
     def add_episode(self, name, season_number, ep_number):
-        cur = self._connect.cursor()
-        cur.execute(SQL_ADD_EPISODE, (ep_number, season_number, name,
-                                      self._show_name))
-        self._connect.commit()
+        try:
+            with self._connect:
+                cur = self._connect.cursor()
+                cur.execute(SQL_ADD_EPISODE, (ep_number, season_number, name,
+                                              self._show_name))
+        except sqlite.IntegrityError:
+            raise ValueError(f"Duplicate episode s{season_number}e{ep_number}")
 
     def get_episodes(self, season_number=None):
         """
