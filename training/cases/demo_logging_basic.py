@@ -4,6 +4,7 @@ Les logs sont ajoutés à un fichier `file.log`.
 """
 
 import logging
+import training.cases.demo_logging_second as second
 
 logging.basicConfig(filename="file.log",
                     level=logging.INFO,
@@ -20,3 +21,5 @@ try:
 except ValueError:
     logging.error("Convert error", exc_info=True)
     logging.exception("Exception logger call")
+
+second.do_something()
