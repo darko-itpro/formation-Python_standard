@@ -1,7 +1,7 @@
 #!/usr/bin/env python 
 
 from faker import Faker
-from training.projects.bank import bank
+from bank import bank
 import pytest
 fake = Faker('fr_FR')
 
