@@ -3,7 +3,7 @@
 
 import unittest
 
-from training.projects.mediamanager import mediamodel
+from mediamanager import mediamodel
 
 
 class CreateSeason(unittest.TestCase):

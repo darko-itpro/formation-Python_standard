@@ -13,8 +13,8 @@ d'illustrer certaines techniques.
 
 import tkinter as tk
 
-from training.projects.mediamanager import mediamodel
-from training.projects.mediamanager import media_widgets
+from mediamanager import mediamodel
+from mediamanager import media_widgets
 
 FENETRE = tk.Tk()
 

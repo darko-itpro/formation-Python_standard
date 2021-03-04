@@ -1,6 +1,6 @@
 #!/usr/bin/env python 
 
-from training.projects.mediamanager import mediamodel as media
+from mediamanager import mediamodel as media
 import pytest
 
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python 
 
-from training.projects.mediamanager import mediamodel
+from mediamanager import mediamodel
 
 
 class ManagedData:

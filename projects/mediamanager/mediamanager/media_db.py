@@ -7,7 +7,7 @@ d'objets représentant une série.
 """
 
 import sqlite3 as sqlite
-from training.projects.mediamanager import mediamodel as media
+from mediamanager import mediamodel as media
 
 SQL_CREATE_SHOWS_TABLE = "CREATE TABLE IF NOT EXISTS shows(" \
                          "name text NOT NULL, " \

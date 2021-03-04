@@ -12,17 +12,17 @@ Work in progress
 
 def launch_app(_):
     # Manière simple de lancer l'interface tkinter
-    import training.projects.mediamanager.media_tk
+    import mediamanager.media_tk
 
 
 def launch_webapp(args):
-    import training.projects.mediamanager.mediaweb as webapp
+    import mediamanager.mediaweb as webapp
     webapp.app.run()
 
 
 def load_data(args):
-    import training.projects.mediamanager.media_file_loader as loader
-    import training.projects.mediamanager.media_db as db
+    import mediamanager.media_file_loader as loader
+    import mediamanager.media_db as db
 
     db_name = args.db_path
 

@@ -6,7 +6,7 @@ Module d'illustratin d'une interface web.
 """
 
 from flask import Flask, render_template, request, redirect
-from training.projects.mediamanager import media_db
+from mediamanager import media_db
 
 app = Flask(__name__)
 
