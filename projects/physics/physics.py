@@ -14,19 +14,19 @@ class Container:
     ZERO_CELCIUS = 273.15
 
     def __init__(self, volume, temperature):
-        self._VOLUME = float(volume)
+        self._volume = float(volume)
         self._temperature = float(temperature + self.ZERO_CELCIUS)
-        self._PRESSURE_MAX = self.pressure() * 2
+        self._pressure_max = self.pressure() * 2
 
     def pressure(self):
-        return self._temperature/self._VOLUME
+        return self._temperature/self._volume
 
     def _check_pressure(self):
-        if self.pressure() >= self._PRESSURE_MAX:
+        if self.pressure() >= self._pressure_max:
             print("stop all")
 
     def status(self):
-        return self._VOLUME, self._temperature, self.pressure()
+        return self._volume, self._temperature, self.pressure()
 
     def increase_temperature_by(self, value):
         if value >= 0:
@@ -44,6 +44,4 @@ class Container:
         self._temperature = value
 
     def __str__(self):
-        return "Container status T:{}, V:{}, P:{:.2f}"\
-            .format(self._temperature - self.ZERO_CELCIUS,
-                    self._VOLUME, self.pressure())
+        return f"Container status T:{self._temperature - self.ZERO_CELCIUS}, V:{self._volume}, P:{self.pressure():.2f}"

@@ -8,30 +8,33 @@ mes stagiaires.
 
 [![License](https://img.shields.io/github/license/darko-itpro/training-python.svg?style=plastic)](https://github.com/darko-itpro/training-python/blob/master/LICENSE)
 
+![GitHub last commit](https://img.shields.io/github/last-commit/darko-itpro/formation-Python_standard)
+
+Ces sources sont en cours de réorganisation.
+
 Ces sources sont organisées pour proposer des exemples de code sur les thèmes
 couverts par les formations de base Python. Elles respectent avec quelques
 adaptations l'organisation d'un package.
 
+## Organisation des sources
+Ces sources ne sont pas **un** projet mais plusieurs. Les projets sont dans le
+répertoire `projects`.  L'organisation (à terme) est la suivante :
+ * `assets` : contient les ressources pour les exercices.
+ * `projects` : contient des projets Python illustrant les concepts vus en formation. Certains
+sont une illustration (correction) du projet réalisé en fromation.
+ * `draft` : un répertoire avec des ressources Python pour la formation.
+ * `stage`: répertoire de travail pour la formation, si nécessaire.
+
 ## Mise en place de l'environnement
 
 ### Prérequis
-[Python](https://www.python.org) doit être installé. La formation est prévue
-pour être compatible Python 3.6+ mais certains codes illustrent des
-fonctionalitées récentes. Il sera alors nécessaire de disposer d'une version
-compatible.
-
-Python ainsi que les dépendances doivent être dans le PATH. Vous pouvez vérifier
-le bon fonctionnement dans un terminal/invite de commande par les instructions
-
-```
-python --version
-python -m pip --version
-```
+[Python](https://www.python.org) doit être installé. La formation est prévue pour être compatible
+Python 3.6+ mais des exemples illustrent des fonctionnalités plus récentes.
 
 ### Récupérez le projet
 Récupérez ce projet en local. En fonction de vos outils et de vos connaissances de Git,
-clonez le répertoire ou récupérez les sources dnas un zip. Vous pouvez placer le projet
-où vous le souhaitez dans votre arborescence.
+clonez le répertoire ou récupérez les sources sous forme d'archive zip. Vous pouvez placer
+le projet où vous le souhaitez dans votre arborescence.
 
 ### Installez les dépendances
 [pip](https://pypi.python.org/pypi/pip) est le gestionnaire de dépendances qui

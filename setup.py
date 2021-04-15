@@ -36,6 +36,8 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/darko-itpro/training-python",
-    install_requires=['bottle>=0.12.16', 'Flask>=1.0.2'],
-    packages=setuptools.find_packages(include=('training', 'training.*',)),
+    install_requires=['bottle>=0.12.16',
+                      'Flask>=1.0.2'],
+    packages=setuptools.find_packages(include=('training',
+                                               'training.*',)),
 )

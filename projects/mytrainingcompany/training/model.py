@@ -2,8 +2,6 @@
 Module pour une représentation de formation sous forme d'objet.
 """
 
-
-
 import sqlite3 as lite
 
 conn = lite.connect("testdb.db")
@@ -48,6 +46,17 @@ except lite.IntegrityError:
     raise ValueError(f"Episode {title} s{season_number}e{ep_number} axists")
 
 
+class Venue:
+    def __init__(self, capacity):
+        self._capacity = capacity
+
+        if self._capacity < 1:
+            raise ValueError(f"Venue capacity too small {self._capacity}")
+
+    def capacity(self):
+        return self._capacity
+
+
 class Student:
     def __init__(self, name: str, title:str = None, company: str = None):
         """
@@ -76,7 +85,7 @@ class Student:
 
 
 class Training:
-    def __init__(self, subject: str, duration: int, available_seats: int = 12):
+    def __init__(self, subject: str, duration: int, price, max_seats: int = 12):
         """
         Describes a training
 
@@ -87,14 +96,17 @@ class Training:
 
         self._duration = int(duration)
         if self._duration < 1:
-            raise ValueError("Duration should be at least one (1) day")
+            raise ValueError(f"Duration should be at least one (1) day : {self._duration}")
 
-        self._seats = int(available_seats)
+        self._seats = int(max_seats)
         if self._seats < 1:
-            raise ValueError('The training should have at least one seat')
+            raise ValueError(f'The training should have at least one seat : {self._seats}')
+
+        self._base_price = int(price)
+        if self._base_price < 1:
+            raise ValueError(f'Training price cannot be negative or null : {self._base_price}')
 
         self._subject = subject
-        self._students = []
 
     @property
     def subject(self):
@@ -105,11 +117,19 @@ class Training:
         return self._duration
 
     @property
-    def students(self):
-        return self._students.copy()
+    def seats(self):
+        return self._seats
+
+
+class scheduled_training:
+    def __init__(self, training: Training, venue: Venue = None):
+        self.training = training
+        self.date
+        self._students = []
+        self._venue = venue
 
     def add_student(self, student: Student):
-        if len(self.students) == self._seats:
+        if len(self.students) >= self.training.:
             raise ValueError("Training full, can't add student")
 
         self._students.append(student)
@@ -151,3 +171,6 @@ class Training:
         self._students = [student for student in self._students if student not in students]
 
         return students
+
+
+
