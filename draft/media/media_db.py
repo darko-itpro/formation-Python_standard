@@ -65,3 +65,13 @@ class TvShowDao:
                 cur.execute(SQL_ADD_EPISODE, (ep_number, season_number, title))
         except sqlite.IntegrityError:
             raise ValueError(f"Episode {title} s{season_number}e{ep_number} axists")
+
+    def get_episodes(self, season=None):
+        """
+        Permet d'accéder aux épisodes en fonction de la saison.
+
+        :param season: saison des épisodes afin de filtrer ceux-ci. Optionnel.
+        :return: la liste des épisodes pour la saison si spécifiée, tous les épisodes si
+        pas de paramètre. Liste vide si la saison n'existe pas.
+        """
+        pass
