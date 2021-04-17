@@ -9,6 +9,7 @@ Work in progress
 
 """
 
+from mediamanager import conf
 
 def launch_app(_):
     # Manière simple de lancer l'interface tkinter
@@ -27,19 +28,13 @@ def load_data(args):
     db_name = args.db_path
 
     for show_name, season, number, title, *_ in loader.load_episode_from_file(args.file):
-        show = db.TvShow(show_name, db_name)
+        show = db.TvShow(show_name, db_name, conf.SQLITE_PATH)
         show.add_episode(title, season, number)
-
-
-def load_cli(args):
-    from training.projects.mediamanager import mediacli
-    mediacli.display_main_menu(args.db_path)
 
 
 if __name__ == '__main__':
 
-    actions = {"cli": load_cli,
-               "web": launch_webapp,
+    actions = {"web": launch_webapp,
                "app": launch_app,
                "load": load_data}
 
@@ -63,5 +58,7 @@ if __name__ == '__main__':
                                              "des données.")
 
     ARGS = PARSER.parse_args()
+
+    conf.SQLITE_PATH = ARGS.db_path  #  Pourrait être validé
 
     actions[ARGS.command](ARGS)

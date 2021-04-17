@@ -1,7 +1,7 @@
 #!/usr/bin/env python 
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify, make_response
 
 app = Flask(__name__)
 
@@ -28,6 +28,11 @@ def add_hero():
     our_heroes.append(request.form.get('new_hero'))
     return "<a href='/tpl/'>Go back<a>"
 
+@app.route('/training/')
+def json_demo():
+    response_body = {"title": "Python", "duration": 5, "seats": 12}
+
+    return make_response((jsonify(response_body)), 200)
 
 if __name__ == '__main__':
     app.run()
