@@ -8,18 +8,19 @@ d'objets représentant une série.
 
 import sqlite3 as sqlite
 from mediamanager import mediamodel as media
+from mediamanager import conf
 
-SQL_CREATE_SHOWS_TABLE = "CREATE TABLE IF NOT EXISTS shows(" \
-                         "name text NOT NULL, " \
-                         "PRIMARY KEY (name));"
-SQL_CREATE_EPISODES_TABLE = "CREATE TABLE IF NOT EXISTS episodes (" \
-                            "number integer NOT NULL, " \
-                            "season integer NOT NULL, " \
-                            "title text NOT NULL, " \
-                            "show text NOT NULL, " \
-                            "PRIMARY KEY(show, number, season), " \
-                            "FOREIGN KEY (show) REFERENCES shows (name) " \
-                            "ON DELETE CASCADE);"
+SQL_DB_MANAGEMENT = ["CREATE TABLE IF NOT EXISTS shows(" \
+                     "name text NOT NULL, " \
+                     "PRIMARY KEY (name));" \
+                     "CREATE TABLE IF NOT EXISTS episodes (" \
+                     "number integer NOT NULL, " \
+                     "season integer NOT NULL, " \
+                     "title text NOT NULL, " \
+                     "show text NOT NULL, " \
+                     "PRIMARY KEY(show, number, season), " \
+                     "FOREIGN KEY (show) REFERENCES shows (name) " \
+                     "ON DELETE CASCADE);"]
 
 SQL_ADD_SHOW = "INSERT INTO shows values(?)"
 SQL_SELECT_SHOWS = "SELECT name FROM shows ORDER BY name"
@@ -29,7 +30,7 @@ SQL_GET_ALL_EPISODES = "SELECT title, season, number " \
                        "FROM episodes " \
                        "WHERE show = ? " \
                        "ORDER BY season, number"
-SQL_GET_EPISODES_FOR_SEASON = "SELECT title, ?, number " \
+SQL_GET_EPISODES_FOR_SEASON = "SELECT title, season, number " \
                               "FROM episodes " \
                               "WHERE show = ? AND season = ? " \
                               "ORDER BY number"
@@ -39,17 +40,9 @@ class MediaDao:
     """
     Cette DAO gère les données au niveau des séries.
     """
-    def __init__(self, dbname="default.db"):
+    def __init__(self, dbname):
         self._db_name = dbname
         self._connect = sqlite.connect(dbname)
-
-        try:
-            cur = self._connect.cursor()
-            cur.execute(SQL_CREATE_SHOWS_TABLE)
-
-        except sqlite.Error as e:
-            print("Error occured")
-            print(e)
 
     def __del__(self):
         try:
@@ -68,7 +61,7 @@ class TvShow:
     """
     Représente une série gérée en base SQLite
     """
-    def __init__(self, show_name, dbname="default.db"):
+    def __init__(self, show_name, dbname):
         """
         Crée une nouvelle série
 
@@ -79,31 +72,19 @@ class TvShow:
         self._connect = sqlite.connect(dbname)
 
         try:
-            self._create_table(SQL_CREATE_SHOWS_TABLE)
-            self._create_table(SQL_CREATE_EPISODES_TABLE)
+            with self._connect:
+                try:
+                    show_insert_cur = self._connect.cursor()
+                    show_insert_cur.execute(SQL_ADD_SHOW, (show_name,))
 
-            shows_cur = self._connect.cursor()
-            shows_cur.execute(SQL_SELECT_SHOWS)
-            if show_name in [name for name, in shows_cur.fetchall()]:
-                pass
-            else:
-                show_insert_cur = self._connect.cursor()
-                show_insert_cur.execute(SQL_ADD_SHOW, (show_name,))
-                self._connect.commit()
+                except sqlite.IntegrityError:
+                    pass  # Le show existe déjà
 
             self._show_name = show_name
 
         except sqlite.Error as e:
             print("Error occured")
             print(e)
-
-    def _create_table(self, create_query):
-        """
-        private method used to create tables.
-        :param create_query: an CREATE TABLE SQL query
-        """
-        cur = self._connect.cursor()
-        cur.execute(create_query)
 
     def __del__(self):
         try:
@@ -139,11 +120,42 @@ class TvShow:
         """
         cur = self._connect.cursor()
         if season_number:
-            cur.execute(SQL_GET_EPISODES_FOR_SEASON, (season_number,
-                                                      self._show_name,
+            cur.execute(SQL_GET_EPISODES_FOR_SEASON, (self._show_name,
                                                       season_number))
         else:
             cur.execute(SQL_GET_ALL_EPISODES, (self._show_name,))
 
         return [media.Episode(title, episode_number, season_number)
                 for title, season_number, episode_number in cur.fetchall()]
+
+
+def configure_db(db_path):
+    """
+    Fonction destinée à paramétrer la base de données en gérant sa
+    version.
+
+    Lorsque ce module est importé au lancement du programme, cette
+    fonction est appelée. Elle crée une connexion à la base et vérifie
+    sa version. SQLite permet de gérer des versions avec les pragma. Si
+    la version est inférieur au nombre de scripts dans la liste
+    SQL_DB_MANAGEMENT, les scripts à partir de l'indice de version sont
+    exécutés. Ceci facilite l'évolution de la structure de la base :
+    la faire évoluer consiste à ajouter le script d'évolution dans la
+    liste.
+    :param db_path: Chemin vers la base de données.
+    """
+    connect = sqlite.connect(db_path)
+
+    cur = connect.cursor()
+    cur.execute("pragma user_version")
+    user_version_value = cur.fetchone()[0]
+    if user_version_value < len(SQL_DB_MANAGEMENT):
+        for statement in SQL_DB_MANAGEMENT[user_version_value:]:
+            cur.executescript(statement)
+
+        cur.execute(f"pragma user_version={len(SQL_DB_MANAGEMENT)}")
+
+    connect.close()
+
+
+configure_db(conf.SQLITE_PATH)
