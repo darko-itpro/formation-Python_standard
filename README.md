@@ -10,7 +10,7 @@ mes stagiaires.
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/darko-itpro/formation-Python_standard)
 
-Ces sources sont en cours de réorganisation.
+Ces sources sont en cours de réorganisation, le contenu de ce README n'est pas à jour. 
 
 Ces sources sont organisées pour proposer des exemples de code sur les thèmes
 couverts par les formations de base Python. Elles respectent avec quelques

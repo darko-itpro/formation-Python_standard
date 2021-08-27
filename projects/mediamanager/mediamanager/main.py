@@ -27,9 +27,25 @@ def load_data(args):
 
     db_name = args.db_path
 
-    for show_name, season, number, title, *_ in loader.load_episode_from_file(args.file):
-        show = db.TvShow(show_name, db_name, conf.SQLITE_PATH)
-        show.add_episode(title, season, number)
+    try:
+        for show_name, season, number, title, *_ in loader.load_episode_from_file(args.file):
+            show = db.TvShow(show_name, db_name, conf.SQLITE_PATH)
+            show.add_episode(title, season, number)
+    except TypeError as e:
+        import sys
+        if args.file is None:
+            print("Erreur :")
+            print(">>> L'option --file est indispensable avec la commande load")
+        else:
+            print('>>> Erreur de type TypeError inconnue')
+            print(e)
+        sys.exit(1)
+
+    except FileNotFoundError:
+        print("Erreur :")
+        print(f">>> Le fichier '{args.file}' n'a pas été trouvé.")
+        import sys
+        sys.exit(1)
 
 
 if __name__ == '__main__':
@@ -46,7 +62,7 @@ if __name__ == '__main__':
     )
 
     PARSER.add_argument("command", choices=list(actions),
-                        help="Lance le programme en cli, web, app (Tkinter) ou "
+                        help="Lance le programme en web, app (Tkinter) ou "
                              "charge simplement des données en base.")
 
     PARSER.add_argument('-s', '--statefull', action='store_true',

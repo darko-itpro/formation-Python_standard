@@ -14,5 +14,5 @@ try:
 except ZeroDivisionError:
     pdb.set_trace()
 
-print('Result is %d' % result)
+print(f'Result is {result}')
 print('Done')

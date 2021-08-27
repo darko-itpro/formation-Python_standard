@@ -63,7 +63,10 @@ class TvShow:
     """
     def __init__(self, show_name, dbname):
         """
-        Crée une nouvelle série
+        La création d'un objet TvShow entraine la création d'un nouvel
+        enregistrement en base avec ce nom de série. Si il existait déjà, une
+        sqlite.IntegrityError est levée et ignorée par le programme car cette
+        exception ne peut être levée que si la série existe déjà.
 
         :param show_name: Nom de la série (non modifiable)
         :param dbname: Nome de la base SQLite, optionnel.
@@ -94,7 +97,7 @@ class TvShow:
             print(e)
 
     def __str__(self):
-        return 'Media DB Connector ({})'.format(self._db_name)
+        return f'Media DB Connector ({self._db_name})'
 
     @property
     def name(self):
@@ -140,7 +143,7 @@ def configure_db(db_path):
     la version est inférieur au nombre de scripts dans la liste
     SQL_DB_MANAGEMENT, les scripts à partir de l'indice de version sont
     exécutés. Ceci facilite l'évolution de la structure de la base :
-    la faire évoluer consiste à ajouter le script d'évolution dans la
+    la faire évoluer consiste à ajouter le script SQL d'évolution dans la
     liste.
     :param db_path: Chemin vers la base de données.
     """

@@ -11,8 +11,24 @@ import os
 
 SERIES_RE = re.compile("-s([0-9]{2})e([0-9]{2})-")
 
+def get_show_values_from_filename(filename):
+    """
+    Retourne les informations d'une série à partir d'un nom de fichier (sans
+    l'extension).
 
-def get_series_value_from_file(filename):
+    :param filename: nom du fichier sans l'extension.
+    :return: Un tuple contenant le nom de la série, le numéro de la saison,
+    numéro d'épisode et titre ou None si le motif utilisé n'est pas trouvé.
+    """
+    series_match = SERIES_RE.search(filename)
+    if series_match:
+        return filename[:series_match.start()].replace('_', ' '), \
+               series_match.group(1), \
+               series_match.group(2), \
+               filename[series_match.end():].replace('_', ' ')
+
+
+def get_series_value_from_filenames(dir_path):
     """
     Retourne les données sur un épisode. Les valeurs sont :
     * Nom de la série
@@ -26,20 +42,16 @@ def get_series_value_from_file(filename):
     :return: une liste de chaines de caractères, voir description.
     :return type: tuple
     """
-    series_file_name, series_ext = os.path.splitext(filename)
+    for item in os.scandir(dir_path):
+        series_file_name, series_ext = os.path.splitext(item.name)
 
-    series_match = SERIES_RE.search(series_file_name)
+        show_data = get_series_value_from_filenames(series_file_name)
+        if show_data:
+            yield *show_data, None, None
+        else:
+            pass  #TODO: Un log devrait être ajouté
 
-    if series_match:
-        return series_file_name[:series_match.start()].replace('_', ' '),\
-               series_match.group(1),\
-               series_match.group(2),\
-               series_file_name[series_match.end():].replace('_', ' '),\
-               None,\
-               None
-
-
-def get_series_values_from_csv(record):
+def get_series_values_from_csv(filepath):
     """
     Retourne les données sur un épisode. Les valeurs sont :
     * Nom de la série
@@ -54,32 +66,33 @@ def get_series_values_from_csv(record):
     :return: une liste de chaines de caractères, voir description.
     :return type: tuple
     """
-    data = record.split(";")
-    return tuple(data)
+
+    with open(filepath, 'r') as media_file:
+        media_file.readline()
+
+        for media in media_file:
+            yield tuple(media[:-1].split(";"))
 
 
 def load_episode_from_file(filepath):
     """
-    Fonction spécifique aux exercices pour charger les noms de fichiers à partir
-    d'un fichier.
+    Cette fonction va charger les informations des médias.
+
+    Si `filepath` est un répertoire, les informations seront extraites du mon
+    des fichiers sinon à partir du contenu du fichier.
 
     :param filepath: Chemin vers le fichier contenant les noms de fichiers épisodes
     :return: Une liste de tuples (titre série, numéro série, numéro épisode, titre épisode)
     :raise OSError: if file does not exist.
     """
 
-    with open(filepath, 'r') as media_file:
-        if os.path.splitext(filepath)[1] == ".csv":
-            media_file.readline()
-            get_series_values = get_series_values_from_csv
+    if os.path.isdir(filepath):
+        get_series_values = get_series_value_from_filenames
+    else:
+        get_series_values = get_series_values_from_csv
 
-        else:
-            get_series_values = get_series_value_from_file
-
-        media_data = [get_series_values(media[:-1])
-                      for media in media_file]
-
-    return media_data
+    for media in get_series_values(filepath):
+        yield media
 
 
 if __name__ == '__main__':
