@@ -2,6 +2,7 @@
 import tkinter as tk
 
 window = tk.Tk()
+window.geometry('100x50')
 window.title('Demo button')
 
 
