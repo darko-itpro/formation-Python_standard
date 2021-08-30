@@ -4,7 +4,7 @@ Les logs sont ajoutés à un fichier `file.log`.
 """
 
 import logging
-import training.cases.demo_logging_second as second
+import cases.demo_logging_second as second
 
 logging.basicConfig(filename="file.log",
                     level=logging.INFO,
