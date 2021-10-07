@@ -1,5 +1,5 @@
-Python : découverte du langage
-==============================
+Python : Démo documentation
+===========================
 
 Cette documentation Python est un support de formation. Il est un complément
 de la formation et ne saurait se substituer à celle-ci. Cette documentation ne
@@ -9,16 +9,6 @@ constitue pas non plus à elle seule une référence du langage Python.
    :maxdepth: 2
    :caption: Contents:
 
-   cours/presentation
-   cours/toolbox
-   cours/bases
-   cours/structures_controle
-   cours/fonctions
-   cours/objet
-   cours/web
-   cours/glossaire
-   exercices/sncf
-   exercices/mediatheque
    modules/draft
    modules/mediatheque
 
