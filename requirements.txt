@@ -4,4 +4,4 @@ Flask>=1.1.2
 geopy>=1.21.0
 ipython>=7.13.0
 pylint>=2.4.4
-
+PySide6==6.2.0
