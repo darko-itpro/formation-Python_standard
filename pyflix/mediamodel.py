@@ -93,7 +93,8 @@ class Episode:
                              f"({self.season_number})")
 
         if self.duration is not None and self.duration <= 0:
-            raise ValueError(f"Duration must be positive value")
+            raise ValueError(f"Duration must be positive value, got "
+                             f"{self.duration}")
 
     def __eq__(self, other):
         """
@@ -112,6 +113,8 @@ class Episode:
 
     def __gt__(self, other):
         if not isinstance(other, Episode):
-            raise TypeError(f"'>' not supported between instances of 'Episode' and '{type(other)}'")
+            raise TypeError(f"'>' not supported between instances of "
+                            f"'Episode' and '{type(other)}'")
 
-        return (self.season_number, self.number) > (other.season_number, other.number)
+        return (self.season_number, self.number) \
+            > (other.season_number, other.number)

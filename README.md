@@ -1,4 +1,4 @@
-# A Python Training - Standard
+# A Python Training - PyFlix
 
 This is the practical cases for Python training I provide. Intended for french
 trainee, the rest of the explanations are in french.
@@ -10,20 +10,17 @@ mes stagiaires.
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/darko-itpro/formation-Python_standard)
 
-Ces sources sont en cours de réorganisation, le contenu de ce README n'est pas à jour. 
+Ces sources représentent un projet de référence pour une formation Python. Il couvre aussi bien les
+fondamentaux que des notions avancées.
 
-Ces sources sont organisées pour proposer des exemples de code sur les thèmes
-couverts par les formations de base Python. Elles respectent avec quelques
-adaptations l'organisation d'un package.
+Ces sources sont en cours de réorganisation, le contenu de ce README n'est pas à jour. 
 
 ## Organisation des sources
 Ces sources ne sont pas **un** projet mais plusieurs. Les projets sont dans le
 répertoire `projects`.  L'organisation (à terme) est la suivante :
  * `assets` : contient les ressources pour les exercices.
- * `projects` : contient des projets Python illustrant les concepts vus en formation. Certains
-sont une illustration (correction) du projet réalisé en fromation.
- * `draft` : un répertoire avec des ressources Python pour la formation.
- * `stage`: répertoire de travail pour la formation, si nécessaire.
+ * `pyflix` : est le projet décrit ci-dessous
+ * `tests` : est le package contenant des tests.
 
 ## Mise en place de l'environnement
 
@@ -60,6 +57,41 @@ make html
 ```
 
 La documentation est alors dispoible dans le sous répertoire *_build/html*.
+
+# Vers PyFlix
+
+Ce projet illustre un résultat final qui peut être vu en formation. Le sujet
+est d'aller vers la mise en place d'une plate-forme media. La finalité pourra
+aussi bien être un mediacenter personnel qu'un service commercial.
+
+## Usage
+Le point d'entrée de cette application est le module `mediamanager.main`.
+Celui-ci doit être lancé d'un shell avec une commande. Les commandes sont :
+ * **load** : lance le programme de chargement des données
+ * **web** : lance la webapp locale
+ * **app** : lance l'application tkinter
+
+Note : les fichiers *launcher* en `.bat` et `sh` lancent la webapp avec tous
+les paramètres par défaut.
+
+## Précisions techniques
+### Configuration de l'application
+Les paramètres de l'application sont dans le module `mediamanager.conf`. Ce
+module conient la configuration par défaut. Il doit être importé dans le
+*programme principal* et modifié en fonction des paramètres de lancement de
+l'application. Ce module doit ensuite être importé dans les modules où ces
+paramètres seront nécessaires et son conenu sera donc disponible. 
+
+### Configuration de la base de données
+Cette application utilise une base de données SQLite.
+
+Le module `mediamanager.media_db` contient tout le nécessaire à l'utilisation
+d'une base de données. Les scripts SQL sont déclarés dans ce module. La logique
+de création, évolution et maintenance est expliquée dans le module.
+
+### Options de la ligne de commande
+Cette application utilise les arguments de la ligne de commande. L'utilisation
+de ces argument est géré dans le module `mediamanager.main` avec `argparse`.
 
 ## Exercices pratiques
 

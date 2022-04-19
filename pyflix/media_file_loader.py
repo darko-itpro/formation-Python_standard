@@ -11,6 +11,7 @@ import os
 
 SERIES_RE = re.compile("-s([0-9]{2})e([0-9]{2})-")
 
+
 def get_show_values_from_filename(filename):
     """
     Retourne les informations d'une série à partir d'un nom de fichier (sans
@@ -49,7 +50,8 @@ def get_series_value_from_filenames(dir_path):
         if show_data:
             yield *show_data, None, None
         else:
-            pass  #TODO: Un log devrait être ajouté
+            pass  # TODO: Un log devrait être ajouté
+
 
 def get_series_values_from_csv(filepath):
     """

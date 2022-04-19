@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 """
 Crée une fenêtre permétant de gérer des épisodes d'une série télévisée.
 Les widgets sont dans un module dédié.
@@ -13,8 +10,8 @@ d'illustrer certaines techniques.
 
 import tkinter as tk
 
-from mediamanager import mediamodel
-from mediamanager import media_widgets
+from pyflix import mediamodel
+from pyflix.ui import media_widgets
 
 FENETRE = tk.Tk()
 
@@ -44,7 +41,8 @@ def select_episode(ep_index):
 
     :param ep_index: indice d'un épisode dans la collection.
     """
-    FORM_FRAME.set_values(EPISODE_LIST[ep_index].title, EPISODE_LIST[ep_index].number)
+    FORM_FRAME.set_values(EPISODE_LIST[ep_index].title,
+                          EPISODE_LIST[ep_index].number)
 
 
 def delete_episode(ep_index):
@@ -58,7 +56,7 @@ def delete_episode(ep_index):
 
 def load_file():
     from tkinter import filedialog
-    from training.projects.mediamanager import media_file_loader as loader
+    from pyflix import media_file_loader as loader
 
     filename = filedialog.askopenfilename(title="Select media file",
                                           filetypes=(("CSV files", "*.csv"),
@@ -78,7 +76,8 @@ tk.Button(BUTTONS_FRAME, text='Quit', command=FENETRE.quit).pack(side=tk.RIGHT)
 BUTTONS_FRAME.pack(side=tk.BOTTOM)
 
 FORM_FRAME = media_widgets.EpisodeEntry(FENETRE, add_episode, "Titre", "N°")
-EPISODES_FRAME = media_widgets.CollectionFrame(FENETRE, select_callback=select_episode,
+EPISODES_FRAME = media_widgets.CollectionFrame(FENETRE,
+                                               select_callback=select_episode,
                                                delete_callback=delete_episode)
 EPISODES_FRAME.pack(side=tk.LEFT)
 FORM_FRAME.pack()

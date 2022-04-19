@@ -3,7 +3,7 @@
 
 import unittest
 
-from mediamanager import mediamodel
+from pyflix import mediamodel
 
 
 class CreateSeason(unittest.TestCase):

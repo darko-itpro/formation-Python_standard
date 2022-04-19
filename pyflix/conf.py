@@ -8,5 +8,9 @@ lancement. Par la suite, chaque module qui charge ce module de configuration
 accèdera à la bonne valeur de paramètre.
 """
 
+from pathlib import Path
+
+ROOT_PATH = Path(__file__).parent.parent
+
 # PATHs
-SQLITE_PATH = "default.db"
+SQLITE_PATH = ROOT_PATH / "default.db"

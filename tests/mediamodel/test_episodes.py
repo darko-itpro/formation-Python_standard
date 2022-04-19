@@ -1,6 +1,6 @@
 #!/usr/bin/env python 
 
-from mediamanager import mediamodel as media
+from pyflix import mediamodel as media
 import pytest
 
 

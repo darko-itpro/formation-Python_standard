@@ -1,6 +1,4 @@
-#!/usr/bin/env python 
-
-from mediamanager import mediamodel
+from pyflix import mediamodel
 
 
 class ManagedData:

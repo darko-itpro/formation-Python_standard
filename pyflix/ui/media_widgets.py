@@ -1,11 +1,10 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 import tkinter as tk
+
 
 class EpisodeEntry(tk.Frame):
     """
-    Frame permétant de grouper le éléments du formulaire de saisie d'un épisode.
+    Frame permétant de grouper le éléments du formulaire de saisie d'un
+    épisode.
     """
     def __init__(self, master=None, action_callback=None, label_1_text=None,
                  label_2_text=None):
@@ -85,7 +84,8 @@ class CollectionFrame(tk.Frame):
     """
     Frame permétant de gérer la collection d'épisodes.
     """
-    def __init__(self, master=None, select_callback=None, delete_callback=None):
+    def __init__(self, master=None, select_callback=None,
+                 delete_callback=None):
         """
         Construct a frame widget with the parent MASTER
 
@@ -118,7 +118,8 @@ class CollectionFrame(tk.Frame):
 
     def add_element(self, element, index=tk.END):
         """
-        Ajoute un épisode dans la liste. L'index permet d'ordonner les épisodes.
+        Ajoute un épisode dans la liste. L'index permet d'ordonner les
+        épisodes.
 
         :param element: Titre de l'épisode
         :param index: indice d'insertion

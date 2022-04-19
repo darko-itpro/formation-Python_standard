@@ -7,7 +7,7 @@ Module de test de la classe Episode
 
 import unittest
 
-from mediamanager import mediamodel
+from pyflix import mediamodel
 
 
 class CreateEpisode(unittest.TestCase):

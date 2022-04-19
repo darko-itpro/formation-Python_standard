@@ -1,31 +1,33 @@
-#!/usr/bin/env python 
-# -*- coding: utf-8 -*-
-
 """
 Cette DAO illustre une manière de se connecter à une base de données à partir
 d'objets représentant une série.
 """
 
 import sqlite3 as sqlite
-from mediamanager import mediamodel as media
-from mediamanager import conf
 
-SQL_DB_MANAGEMENT = ["CREATE TABLE IF NOT EXISTS shows(" \
-                     "name text NOT NULL, " \
-                     "PRIMARY KEY (name));" \
-                     "CREATE TABLE IF NOT EXISTS episodes (" \
-                     "number integer NOT NULL, " \
-                     "season integer NOT NULL, " \
-                     "title text NOT NULL, " \
-                     "show text NOT NULL, " \
-                     "PRIMARY KEY(show, number, season), " \
-                     "FOREIGN KEY (show) REFERENCES shows (name) " \
+from collections import namedtuple
+
+from pyflix import mediamodel as media
+from pyflix import conf
+
+SQL_DB_MANAGEMENT = ["CREATE TABLE IF NOT EXISTS shows("
+                     "name text NOT NULL, "
+                     "PRIMARY KEY (name));"
+                     "CREATE TABLE IF NOT EXISTS episodes ("
+                     "number integer NOT NULL, "
+                     "season integer NOT NULL, "
+                     "title text NOT NULL, "
+                     "show text NOT NULL, "
+                     "duration, "
+                     "year, "
+                     "PRIMARY KEY(show, number, season), "
+                     "FOREIGN KEY (show) REFERENCES shows (name) "
                      "ON DELETE CASCADE);"]
 
 SQL_ADD_SHOW = "INSERT INTO shows values(?)"
 SQL_SELECT_SHOWS = "SELECT name FROM shows ORDER BY name"
 
-SQL_ADD_EPISODE = "INSERT INTO episodes values(?, ?, ?, ?)"
+SQL_ADD_EPISODE = "INSERT INTO episodes values(?, ?, ?, ?, ?, ?)"
 SQL_GET_ALL_EPISODES = "SELECT title, season, number " \
                        "FROM episodes " \
                        "WHERE show = ? " \
@@ -34,6 +36,11 @@ SQL_GET_EPISODES_FOR_SEASON = "SELECT title, season, number " \
                               "FROM episodes " \
                               "WHERE show = ? AND season = ? " \
                               "ORDER BY number"
+
+
+Episode = namedtuple("Episode", ('title', 'season_number', 'number',
+                                 'duration', 'year'),
+                     defaults=[None, None])
 
 
 class MediaDao:
@@ -107,12 +114,13 @@ class TvShow:
     def episodes(self):
         return self.get_episodes()
 
-    def add_episode(self, name, season_number, ep_number):
+    def add_episode(self, name: str, season_number: int, ep_number: int,
+                    duration: int = None, year: int = None):
         try:
             with self._connect:
                 cur = self._connect.cursor()
                 cur.execute(SQL_ADD_EPISODE, (ep_number, season_number, name,
-                                              self._show_name))
+                                              self._show_name, duration, year))
         except sqlite.IntegrityError:
             raise ValueError(f"Duplicate episode s{season_number}e{ep_number}")
 

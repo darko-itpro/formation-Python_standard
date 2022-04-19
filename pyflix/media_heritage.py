@@ -1,14 +1,13 @@
-#!/usr/bin/env python 
-
 """
 Ce module est destiné à illustrer la mise en œuvre de l'héritage.
 
-Ce module reprend la classe *Episode* du modèle média. Si nous définissions une classe
+Ce module reprend la classe *Episode* du modèle média. Si nous
+définissions une classe
 """
 
 
 class Media:
-    def __init__(self, title, year:int=None, duration:int=None):
+    def __init__(self, title, year: int = None, duration: int = None):
         self.title = title
         self.year = int(year) if year is not None else None
         self.duration = int(duration) if duration is not None else None
@@ -23,7 +22,8 @@ class Media:
 
 
 class Movie(Media):
-    def __init__(self, title, director, year:int=None, duration:int=None):
+    def __init__(self, title, director, year: int = None,
+                 duration: int = None):
         super().__init__(title, year, duration)
         self.director = director
 

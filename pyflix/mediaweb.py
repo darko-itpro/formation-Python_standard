@@ -34,9 +34,11 @@ def view_show_details(show_name):
     return render_template('show_detail.html', title=selected_show.name,
                            episodes=selected_show.get_episodes())
 
+
 @app.route('/show/<show_name>/new_episode/')
 def add_episode(show_name):
     return render_template('show_add.html', title=show_name)
+
 
 @app.route('/show/<show_name>/episodes/', methods=['GET', 'POST'])
 def episode(show_name):
@@ -48,7 +50,8 @@ def episode(show_name):
         episode_title = request.form['episode_title']
         episode_number = request.form['episode_number']
         episode_season = request.form['season_number']
-        selected_show.add_episode(episode_title, episode_number, episode_season)
+        selected_show.add_episode(episode_title,
+                                  episode_number, episode_season)
         return redirect(f"/show/{show_name}")
     else:
         return render_template('show_detail.html', title=selected_show.name,
@@ -58,6 +61,7 @@ def episode(show_name):
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template("page_not_found.html"), 404
+
 
 if __name__ == '__main__':
     app.run()
